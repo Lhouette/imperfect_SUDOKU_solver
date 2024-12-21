@@ -4,6 +4,7 @@ https://lhouette.github.io/imperfect_SUDOKU_solver/SUDOKU.html
 It's an algorithm I came up with, but it doesn't solve all problems.
 
 When solving a Sudoku problem, I tried to solve it as much as possible without making any predictions.
+I tried to use only logical methods.
 Easy problems can be solved, but some very difficult problems cannot be solved.
 
 Written in an html file that can be executed in the browser.
