@@ -1,5 +1,6 @@
 # imperfect_SUDOKU_solver
- It's an algorithm I came up with, but it doesn't solve all problems.
+https://lhouette.github.io/imperfect_SUDOKU_solver/SUDOKU.html
+It's an algorithm I came up with, but it doesn't solve all problems.
 
 When solving a Sudoku problem, I tried to solve it as much as possible without making any predictions.
 Easy problems can be solved, but some very difficult problems cannot be solved.
