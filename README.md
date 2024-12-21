@@ -28,3 +28,5 @@ As you fill in the spaces, blue numbers will appear. If there is only one number
 
 This is what it looks like when the problem is completely solved.
 
+Press r to reset all cells.
+Pressing key 0 will reset the number entered in that cell.
