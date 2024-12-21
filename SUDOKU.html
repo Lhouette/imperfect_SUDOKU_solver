@@ -187,8 +187,8 @@
             var key = e["key"];
             if(key=="w"){pos[1]-=1;if(pos[1]<0){pos[1]+=1;}}
             if(key=="a"){pos[0]-=1;if(pos[0]<0){pos[0]+=1;}}
-            if(key=="s"){pos[1]+=1;if(pos[1]>8){pos[1]+=1;}}
-            if(key=="d"){pos[0]+=1;if(pos[0]>8){pos[0]+=1;}}
+            if(key=="s"){pos[1]+=1;if(pos[1]>8){pos[1]-=1;}}
+            if(key=="d"){pos[0]+=1;if(pos[0]>8){pos[0]-=1;}}
             if(key=="1"){mainGrid[pos[0]+pos[1]*9] = [2,1,0,0,0,0,0,0,0,0]; reset();}
             if(key=="2"){mainGrid[pos[0]+pos[1]*9] = [2,0,1,0,0,0,0,0,0,0]; reset();}
             if(key=="3"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,1,0,0,0,0,0,0]; reset();}
