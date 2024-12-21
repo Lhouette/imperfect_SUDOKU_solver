@@ -30,3 +30,7 @@ This is what it looks like when the problem is completely solved.
 
 Press r to reset all cells.
 Pressing key 0 will reset the number entered in that cell.
+
+![image](https://github.com/user-attachments/assets/78e4a7ed-2c3b-4af1-b633-f6ae6a480ce5)
+
+If you enter an incorrect number, a question mark will appear as shown above.
