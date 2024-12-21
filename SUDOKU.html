@@ -1,0 +1,205 @@
+<html>
+    <title>SUDOKU</title>
+</html>
+<body>
+    <canvas id="canvas" width="540" height="540"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        var mainGrid = [];
+        for(var i=0;i<81;i++){
+            mainGrid[i]= [0,1,1,1,1,1,1,1,1,1];
+        }
+        var domainList = [];
+        for(var i=0; i<9; i++){
+            domainList[i] = [
+                9*i+0,
+                9*i+1,
+                9*i+2,
+                9*i+3,
+                9*i+4,
+                9*i+5,
+                9*i+6,
+                9*i+7,
+                9*i+8
+            ];
+            domainList[i+9] = [
+                9*0+i,
+                9*1+i,
+                9*2+i,
+                9*3+i,
+                9*4+i,
+                9*5+i,
+                9*6+i,
+                9*7+i,
+                9*8+i
+            ];
+            domainList[i+18] = [
+                9*(i-i%3)+0+3*(i%3),
+                9*(i-i%3)+1+3*(i%3),
+                9*(i-i%3)+2+3*(i%3),
+                9*(i-i%3)+9+3*(i%3),
+                9*(i-i%3)+10+3*(i%3),
+                9*(i-i%3)+11+3*(i%3),
+                9*(i-i%3)+18+3*(i%3),
+                9*(i-i%3)+19+3*(i%3),
+                9*(i-i%3)+20+3*(i%3)
+            ];
+        }
+        var pos=[0,0];
+        var n=0;
+        function reset(){
+            for(var i=0;i<81;i++){
+                if(mainGrid[i][0]!=2){
+                    mainGrid[i] = [0,1,1,1,1,1,1,1,1,1];
+                }
+            }
+        }
+        function resetAll(){
+            for(var i=0;i<81;i++){
+                mainGrid[i] = [0,1,1,1,1,1,1,1,1,1];
+            }
+        }
+        function toCo(d){
+            var c=0;
+            var s=0;
+            for(var i=0;i<9;i++){
+                s+=d[i];
+                c+=(2**i)*d[i];
+            }
+            return [s,c];
+        }
+        function cutHorizon(n){
+            var dat = [];
+            var arr = [];
+            for(var i=0;i<9;i++){
+                for(var j=0;j<9;j++){arr[j]=mainGrid[domainList[n][i]][j+1];}
+                dat[i] = toCo(arr);
+            }
+            for(var i=0;i<9;i++){
+                var s = dat[i][0];
+                var m = dat[i][1];
+                var ss = 0;
+                for(var j=i;j<9;j++){
+                    if(dat[j][1]==m){ss++;}
+                }
+                if(s<=ss){
+                    for(var k=0;k<9;k++){
+                        if(k<i||dat[k][1]!=m){
+                            for(var l=0;l<9;l++){
+                                if(mainGrid[domainList[n][i]][l+1]==1){mainGrid[domainList[n][k]][l+1]=0;}
+                            }
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+        function cutVertical(n){
+            var dat = [];
+            var arr = [];
+            for(var i=0;i<9;i++){
+                for(var j=0;j<9;j++){arr[j]=mainGrid[domainList[n][j]][i+1];}
+                dat[i] = toCo(arr);
+            }
+            for(var i=0;i<9;i++){
+                var s = dat[i][0];
+                var m = dat[i][1];
+                var ss = 0;
+                for(var j=i;j<9;j++){
+                    if(dat[j][1]==m){ss++;}
+                }
+                if(s<=ss){
+                    for(var k=0;k<9;k++){
+                        if(k<i||dat[k][1]!=m){
+                            for(var l=0;l<9;l++){
+                                if(mainGrid[domainList[n][l]][i+1]==1){mainGrid[domainList[n][l]][k+1]=0;}
+                            }
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+        function draw(){
+            cutHorizon(n);
+            cutVertical(n);
+            ctx.clearRect(0,0,540,540);
+            ctx.fillStyle = "#DDD";
+            for(var i=0;i<81;i++){
+                for(var j=0;j<9;j++){
+                    if(mainGrid[i][j+1] == 1){ctx.fillRect(7+60*(i%9)+16*(j%3), 7+60*(i-i%9)/9+16*(j-j%3)/3,14,14);}
+                }
+            }
+            ctx.strokeStyle = "#000";
+            ctx.strokeRect(0,0,540,540);
+            ctx.beginPath();
+            for(var i=0;i<10;i++){
+                ctx.moveTo(0,60*i);
+                ctx.lineTo(540, 60*i);
+                ctx.moveTo(60*i,0);
+                ctx.lineTo(60*i, 540);
+                if(i==9){break;}
+                ctx.strokeRect(3+60*(i-i%3),3+180*(i%3), 174, 174);
+            }
+            ctx.stroke();
+            ctx.strokeStyle = "#00F";
+            if(n==26){n=0;}else{n++;}
+            for(var i=0;i<81;i++){
+                if(mainGrid[i][0]==2){continue;}
+                var sss = 0;
+                for(var j=0;j<9;j++){
+                    sss += mainGrid[i][j+1];
+                }
+                if(sss==1){mainGrid[i][0]=1;}
+                else if(sss == 1){mainGrid[i][0] = -1;}
+                else {mainGrid[i][0] = 0;}
+            }
+            for(var i=0;i<81;i++){
+                if(mainGrid[i][0]==2){
+                    ctx.fillStyle = "#000";
+                    ctx.font = "60px serif";
+                    for(var j=0;j<9;j++){
+                        if(mainGrid[i][j+1] == 1){
+                            ctx.fillText(j+1, 60*(i%9)+12,60*(i-i%9)/9+52);
+                        }
+                    }
+                }else if(mainGrid[i][0] == 1){
+                    ctx.fillStyle = "#00F";
+                    ctx.font = "60px serif";
+                    for(var j=0;j<9;j++){
+                        if(mainGrid[i][j+1] == 1){
+                            ctx.fillText(j+1, 60*(i%9)+12,60*(i-i%9)/9+52);
+                        }
+                    }
+                }else if(mainGrid[i][0] == -1){
+                    ctx.fillStyle = "#F00";
+                    ctx.font = "60px serif";
+                    ctx.fillText("?",60*(i%9)+12,60*(i-i%9)/9+52);
+                }
+            }
+            ctx.strokeStyle = "#F00";
+            ctx.strokeRect(3+60*pos[0],3+60*pos[1],54,54);
+            window.requestAnimationFrame(draw);
+        }
+        window.requestAnimationFrame(draw);
+        window.addEventListener("keydown", (e)=>{
+            var key = e["key"];
+            if(key=="w"){pos[1]-=1;if(pos[1]<0){pos[1]+=1;}}
+            if(key=="a"){pos[0]-=1;if(pos[0]<0){pos[0]+=1;}}
+            if(key=="s"){pos[1]+=1;if(pos[1]>8){pos[1]+=1;}}
+            if(key=="d"){pos[0]+=1;if(pos[0]>8){pos[0]+=1;}}
+            if(key=="1"){mainGrid[pos[0]+pos[1]*9] = [2,1,0,0,0,0,0,0,0,0]; reset();}
+            if(key=="2"){mainGrid[pos[0]+pos[1]*9] = [2,0,1,0,0,0,0,0,0,0]; reset();}
+            if(key=="3"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,1,0,0,0,0,0,0]; reset();}
+            if(key=="4"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,0,1,0,0,0,0,0]; reset();}
+            if(key=="5"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,0,0,1,0,0,0,0]; reset();}
+            if(key=="6"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,0,0,0,1,0,0,0]; reset();}
+            if(key=="7"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,0,0,0,0,1,0,0]; reset();}
+            if(key=="8"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,0,0,0,0,0,1,0]; reset();}
+            if(key=="9"){mainGrid[pos[0]+pos[1]*9] = [2,0,0,0,0,0,0,0,0,1]; reset();}
+            if(key=="0"){mainGrid[pos[0]+pos[1]*9] = [0,1,1,1,1,1,1,1,1,1]; reset();}
+            if(key=="r"){resetAll();}
+        });
+    </script>
+</body>
